@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>StudentHub - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      .sr-only-svg {
+        position: absolute;
+      }
+
+      .brand.white {
+        color: #ffffff;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .wide {
+        width: 100%;
+      }
+    </style>
+
+  </head>
+  
+  <body>
+    <svg class="sr-only-svg" width="0" height="0">
+      <defs>
+        
+        <symbol id="cap" viewBox="0 0 24 24">
+          <path d="M2 9l10-5 10 5-10 5z"/>
+          <path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/>
+        </symbol>
+        
+        <symbol id="grid" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="9" rx="1"/>
+          <rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/>
+          <rect x="3" y="16" width="7" height="5" rx="1"/>
+        </symbol>
+        
+        <symbol id="users" viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3.5"/>
+          <path d="M2.5 20c.6-4 3.2-6 6.5-6s5.9 2 6.5 6"/>
+          <path d="M16 4.6a3.5 3.5 0 010 6.8M18 14.4c2 .7 3.2 2.5 3.5 5.6"/>
+        </symbol>
+        
+        <symbol id="user" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c.7-4.5 4-6.5 8-6.5s7.3 2 8 6.5"/>
+        </symbol>
+        
+        <symbol id="plus" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </symbol>
+        
+        <symbol id="edit" viewBox="0 0 24 24">
+          <path d="M4 20h4L19 9l-4-4L4 16z"/>
+        </symbol>
+        
+        <symbol id="lock" viewBox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="9" rx="2"/>
+          <path d="M8 11V8a4 4 0 018 0v3"/>
+        </symbol>
+        
+        <symbol id="search" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.5"/>
+          <path d="M20 20l-4.2-4.2"/>
+        </symbol>
+        
+        <symbol id="check" viewBox="0 0 24 24">
+          <path d="M5 12.5l4.5 4.5L19 7.5"/>
+        </symbol>
+        
+        <symbol id="x" viewBox="0 0 24 24">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </symbol>
+      </defs>
+    </svg>
+    
+    <div class="center">
+      
+      <div class="hero">
+        <div class="brand white">
+          <svg class="i"><use href="#cap"/></svg> StudentHub
+        </div>
+        <h2>Student records, kept in order.</h2>
+        
+        <p class="hero-sub">Add, search and manage every student in one clean, simple place.</p>
+      </div>
+      
+      <div class="authwrap">
+        <div class="cardauth">
+          <h1 id="title">Welcome back</h1>
+          <p class="muted sub" id="subtitle">Log in to continue to StudentHub.</p>
+          
+          <form id="f">
+            <div id="nameBox" class="hidden">
+              <label>Full Name</label>
+              <input id="full_name" placeholder="Enter your full name">
+            </div>
+            
+            <label>Email</label>
+            <input id="email" type="email" placeholder="Enter your email" required>
+            
+            <label>Password</label>
+            <input id="password" type="password" placeholder="Enter your password" required>
+            
+            <p class="err" id="err"></p>
+
+            <button id="btn" class="wide" type="submit">Log in</button>
+          
+          </form>
+          
+          <p class="muted">
+            <span id="sw">No account?</span> 
+            <a href="#" id="toggle">Sign up</a>
+          </p>
+        
+        </div>
+      </div>
+    </div>
+    <script>
+    
+    let signup=false;
+    
+    toggle.onclick=e=>{e.preventDefault();signup=!signup;nameBox.style.display=signup?"block":"none";
+    title.textContent=signup?"Create your account":"Welcome back";subtitle.textContent=signup?"Sign up to start managing student records.":"Log in to continue to StudentHub.";btn.textContent=signup?"Sign Up":"Log In";
+    sw.textContent=signup?"Have an account?":"No account?";toggle.textContent=signup?"Log in":"Sign up";err.textContent=""};
+    
+    f.onsubmit=async e=>{e.preventDefault();err.textContent="";
+    const body={full_name:full_name.value,email:email.value,password:password.value};
+    const r=await fetch(signup?"/api/signup":"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json(); if(!r.ok) return err.textContent=d.error;
+    
+    if(signup){alert("Account created! Please log in.");toggle.click()} else location.href="/";
+  };
+  </script>
+  </body>
+</html>

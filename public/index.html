@@ -1,0 +1,382 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>StudentHub Dashboard</title>
+    <style>
+      .svg-defs {
+        position: absolute;
+      }
+
+      .card.compact {
+        margin-bottom: 16px;
+      }
+
+      .card.split-card {
+        margin-top: 16px;
+      }
+
+      .card.recent-card {
+        margin-top: 16px;
+      }
+
+      .row.spread,
+      .row.justify-between {
+        justify-content: space-between;
+      }
+
+      .row.spread h3,
+      .row.justify-between h3 {
+        margin: 0;
+      }
+
+      .empty {
+        display: none;
+      }
+
+      .card.profile-card,
+      .profile-card {
+        max-width: 460px;
+        text-align: center;
+      }
+
+      .profile-avatar,
+      .av.profile-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 34px;
+        margin: 0 auto 12px;
+      }
+
+      .profile-form,
+      form.profile-form {
+        text-align: left;
+      }
+
+      .modal-form .row,
+      .modal-form-row {
+        display: flex;
+      }
+
+      .modal-form .row > div,
+      .modal-form-row > div,
+      .modal-form-col {
+        flex: 1;
+      }
+
+      .modal-form .row > div + div,
+      .modal-form-row > div + div {
+        margin-left: 12px;
+      }
+
+      .modal-form .row.narrow,
+      .modal-form-row {
+        flex-wrap: nowrap;
+      }
+    </style>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+    <body>
+      
+      <svg class="svg-defs" width="0" height="0">
+        <defs>
+
+        <symbol id="cap" viewBox="0 0 24 24">
+          <path d="M2 9l10-5 10 5-10 5z"/>
+          <path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/>
+        </symbol>
+
+        <symbol id="grid" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="7" height="9" rx="1"/>
+          <rect x="14" y="3" width="7" height="5" rx="1"/>
+          <rect x="14" y="12" width="7" height="9" rx="1"/>
+          <rect x="3" y="16" width="7" height="5" rx="1"/>
+        </symbol>
+
+        <symbol id="users" viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="3.5"/>
+          <path d="M2.5 20c.6-4 3.2-6 6.5-6s5.9 2 6.5 6"/>
+          <path d="M16 4.6a3.5 3.5 0 010 6.8M18 14.4c2 .7 3.2 2.5 3.5 5.6"/>
+        </symbol>
+
+        <symbol id="user" viewBox="0 0 24 24">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c.7-4.5 4-6.5 8-6.5s7.3 2 8 6.5"/>
+        </symbol>
+
+        <symbol id="plus" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </symbol>
+
+        <symbol id="edit" viewBox="0 0 24 24">
+          <path d="M4 20h4L19 9l-4-4L4 16z"/>
+        </symbol>
+
+        <symbol id="trash" viewBox="0 0 24 24">
+          <path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>
+        </symbol>
+
+        <symbol id="lock" viewBox="0 0 24 24">
+          <rect x="5" y="11" width="14" height="9" rx="2"/>
+          <path d="M8 11V8a4 4 0 018 0v3"/>
+        </symbol>
+
+        <symbol id="search" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="6.5"/>
+          <path d="M20 20l-4.2-4.2"/>
+        </symbol>
+
+        <symbol id="check" viewBox="0 0 24 24">
+          <path d="M5 12.5l4.5 4.5L19 7.5"/>
+        </symbol>
+
+        <symbol id="x" viewBox="0 0 24 24">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </symbol>
+
+      </defs>
+    </svg>
+    <div class="layout">
+
+        <aside>
+  
+          <div class="brand">
+            <svg class="i">
+              <use href="#cap"/>
+            </svg> StudentHub
+          </div>
+  
+          <button class="nav active" data-view="dashboard">
+            <svg class="i"><use href="#grid"/>
+            </svg> Dashboard
+          </button>
+  
+          <button class="nav" data-view="students">
+            <svg class="i"><use href="#users"/>
+            </svg> Students
+          </button>
+  
+          <button class="nav" data-view="profile">
+            <svg class="i"><use href="#user"/>
+            </svg> My Profile
+          </button>
+  
+          <div class="me">
+            <div class="av" id="meAv">?</div><div>
+              <b id="meName"></b>
+              <span class="tag role" id="meRole">
+              </span>
+            </div>
+          </div>
+  
+          <button class="sm" id="logout">Log out</button>
+
+        </aside>
+
+        <main>
+  
+  <section class="view active" id="v-dashboard">
+    
+    <div class="top">
+      <div>
+        <h1 id="hello">Welcome</h1>
+        <div class="muted">Overview of all student records</div>
+      </div>
+      <button class="addBtn">
+        <svg class="i"><use href="#plus"/>
+        </svg> Add student
+      </button>
+    </div>
+    
+    <div class="card strip">
+      <div>
+        <div class="muted">Total students</div>
+        <div class="big" id="total">0</div>
+      </div>
+
+      <div>
+        <div class="muted">Courses</div>
+        <div class="big" id="courses">0</div>
+      </div>
+
+      <div>
+        <div class="muted" id="l3">Added by you</div>
+        <div class="big" id="third">0</div>
+      </div>
+
+    </div>
+
+    <div class="grid2">
+      <div class="card"><h3>Students by Course</h3><div id="byCourse"></div></div>
+      <div class="card"><h3>Students by Year</h3><div id="byYear"></div></div>
+    </div>
+
+    <div class="card recent-card">
+      <div class="row justify-between">
+        <h3>Recently added</h3>
+        <a href="#" id="seeAll">See all students</a>
+      </div>
+      <table>
+        <tbody id="recent"></tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <section class="view" id="v-students">
+    <div class="top"><div>
+      <h1>Students</h1>
+      <div class="muted" id="count"></div>
+    </div>
+    <button class="addBtn">
+      <svg class="i">
+        <use href="#plus"/>
+      </svg> Add student
+    </button>
+  </div>
+
+    <div class="card">
+      <div class="searchbar">
+        <div class="s">
+          <svg class="i">
+            <use href="#search"/>
+          </svg>
+          <input id="search" placeholder="Search by name, student ID or contact...">
+        </div>
+
+        <select id="fCourse">
+          <option value="">All Courses</option>
+          <option>BSIT</option>
+          <option>BEED</option>
+          <option>BSHM</option>
+          <option>BSAB</option>
+          <option>BSCRIM</option>
+        </select>
+
+        <select id="fYear">
+          <option value="">All Years</option>
+          <option>1st Year</option>
+          <option>2nd Year</option>
+          <option>3rd Year</option>
+          <option>4th Year</option>
+        </select>
+
+        <select id="sort">
+          <option value="newest">Newest</option>
+          <option value="name">Name A–Z</option>
+          <option value="student_id">Student ID</option>
+        </select>
+
+        <button class="ghost" id="clear">Clear</button>
+
+      </div>
+      
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>ID</th>
+              <th>Course</th>
+              <th>Year</th>
+              <th>Contact</th>
+              <th>Added by</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <div class="empty" id="empty">No students found.</div>
+    </div>
+  </section>
+
+  <section class="view" id="v-profile">
+
+    <div class="top">
+      <h1>My profile</h1>
+    </div>
+
+    <div class="card profile-card">
+      <div class="av profile-avatar" id="pAv"></div>
+      <div class="muted" id="pEmail"></div>
+      <p><span class="tag role" id="pRole"></span></p>
+      <form id="pf" class="profile-form">
+        <label>Full Name</label>
+        <input id="pName" required>
+        <button type="submit">Save changes</button>
+      </form>
+    </div>
+
+  </section>
+
+</main>
+</div>
+
+<div class="modal" id="modal">
+  
+  <div class="card">
+  <h2 id="mTitle">Add student</h2>
+  <form id="sf" class="modal-form">
+
+    <label>Student ID</label>
+    <input id="student_id" placeholder="Enter Student ID" required>
+
+    <label>Full name</label>
+    <input id="name" placeholder="Enter Full Name" required>
+
+    <div class="modal-form-row">
+      <div class="modal-form-col">
+
+        <label>Course</label>
+        <select id="course" required>
+          <option value="">Select</option>
+          <option>BSIT</option>
+          <option>BEED</option>
+          <option>BSHM</option>
+          <option>BSAB</option>
+          <option>BSCRIM</option>
+        </select>
+
+      </div>
+
+      <div class="modal-form-col">
+
+        <label>Year</label>
+        <select id="year" required>
+          <option value="">Select</option>
+          <option>1st Year</option>
+          <option>2nd Year</option>
+          <option>3rd Year</option>
+          <option>4th Year</option>
+        </select>
+      </div>
+
+    </div>
+
+    <label>Contact number</label>
+    <input id="contact" placeholder="09XXXXXXXXX" pattern="[0-9+ -]{7,15}">
+
+    <p class="err" id="serr"></p>
+
+    <div class="row">
+      <button type="submit">Save</button>
+      <button type="button" class="ghost" id="cancel">Cancel</button>
+    </div>
+
+  </form>
+
+</div>
+</div>
+
+<div class="toast" id="toast">
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
